@@ -1,0 +1,5 @@
+Flask>=3.0
+cryptography>=42
+pytesseract>=0.3.10
+Pillow>=10.3
+gunicorn>=22
