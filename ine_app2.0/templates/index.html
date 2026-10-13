@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>Extractor de datos INE</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<main>
+<header class="top">
+  <h1>Extractor de datos de credencial INE</h1>
+  <form method="post" action="{{ url_for('logout') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <span class="note">{{ usuario }}{% if admin %} (admin){% endif %}</span>
+    <button class="sec" type="submit">Salir</button>
+  </form>
+</header>
+<p class="sub">Sube una foto del frente de la credencial para obtener nombre, CURP y vigencia.</p>
+
+<section class="card">
+  <div id="drop" class="drop" tabindex="0" role="button" aria-label="Seleccionar imagen">
+    <b>Haz clic para seleccionar</b> o arrastra una imagen aquí<br>
+    <span class="note">JPG, PNG, WEBP… (máx. 10 MB)</span>
+  </div>
+  <input id="file" type="file" accept="image/*" hidden>
+  <div id="prevBox" hidden>
+    <img id="prev" alt="Vista previa">
+    <div class="row"><button id="go">Extraer datos</button><button id="clear" class="sec">Quitar</button></div>
+  </div>
+  <p id="status" class="note center" aria-live="polite"></p>
+</section>
+
+<section id="resCard" class="card" hidden>
+  <h2>Resultado</h2>
+  <dl>
+    <dt>N.º de consulta</dt><dd id="rNum"></dd>
+    <dt>Fecha / hora</dt><dd id="rFh"></dd>
+    <dt>Nombre</dt><dd id="rNom"></dd>
+    <dt>CURP</dt><dd id="rCurp" class="mono"></dd>
+    <dt>Vigencia</dt><dd id="rVig"></dd>
+  </dl>
+  <p id="rWarn" class="note"></p>
+</section>
+
+<section class="card">
+  <div class="row spread">
+    <h2>Consultas registradas</h2>
+    <a class="btn sec" href="{{ url_for('exportar_csv') }}">Descargar CSV</a>
+  </div>
+  <p id="hEmpty" class="note">Cargando…</p>
+  <div class="tw"><table><thead><tr>
+    <th>N.º</th><th>Fecha</th><th>Hora</th><th>Nombre</th><th>CURP</th><th>Vigencia</th><th>Usuario</th><th>Imagen</th>{% if admin %}<th></th>{% endif %}
+  </tr></thead><tbody id="hist"></tbody></table></div>
+</section>
+<p class="note">Contiene datos personales sensibles. Verifica siempre los datos contra la credencial: el OCR puede cometer errores.</p>
+</main>
+<script src="{{ url_for('static', filename='app.js') }}" data-admin="{{ 1 if admin else 0 }}"></script>
+</body>
+</html>
