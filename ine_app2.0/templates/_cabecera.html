@@ -1,0 +1,13 @@
+<header class="top">
+  <div>
+    <h1>{{ titulo }}</h1>
+    <span class="note">{{ rol_nombre }}{% if rol == 'admin' %} ·
+      <a href="{{ url_for('operacion') }}">Operación</a> ·
+      <a href="{{ url_for('captura') }}">Captura</a>{% endif %}</span>
+  </div>
+  <form method="post" action="{{ url_for('logout') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <span class="note">{{ usuario }}</span>
+    <button class="sec" type="submit">Salir</button>
+  </form>
+</header>
