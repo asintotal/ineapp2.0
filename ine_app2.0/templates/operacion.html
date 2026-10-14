@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>Operación · Registros del día</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body data-admin="{{ 1 if rol == 'admin' else 0 }}" data-hoy="{{ hoy }}">
+<main>
+{% set titulo = 'Registros del día' %}
+{% include '_cabecera.html' %}
+
+<section class="card">
+  <div class="row spread">
+    <div class="row">
+      <label class="inline">Día <input type="date" id="fecha" value="{{ hoy }}"></label>
+      <button id="hoy" class="sec" type="button">Hoy</button>
+      <button id="actualizar" class="sec" type="button">Actualizar</button>
+    </div>
+    {% if rol == 'admin' %}<a class="btn sec" href="{{ url_for('exportar_csv') }}">Descargar CSV</a>{% endif %}
+  </div>
+  <p id="resumen" class="note"></p>
+  <p id="status" class="note" aria-live="polite"></p>
+  <p id="vacio" class="note">Cargando…</p>
+  <div class="tw">
+    <table>
+      <thead><tr>
+        <th>N.º de consulta</th><th>Fecha y hora de consulta</th><th>CURP</th><th>Imagen</th><th>CSF</th>{% if rol == 'admin' %}<th></th>{% endif %}
+      </tr></thead>
+      <tbody id="filas"></tbody>
+    </table>
+  </div>
+</section>
+<p class="note">Contiene datos personales sensibles. La tabla se actualiza sola cada 20 segundos.</p>
+</main>
+<script src="{{ url_for('static', filename='common.js') }}"></script>
+<script src="{{ url_for('static', filename='operacion.js') }}"></script>
+</body>
+</html>
